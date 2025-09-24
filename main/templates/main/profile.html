@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6 animate-fade-in">
+        <i class="fas fa-user-circle text-blue-600 mr-2"></i>My Profile
+    </h1>
+
+    {% if is_student %}
+        <!-- Student Profile -->
+        <div class="bg-white rounded-xl shadow-lg p-6 animate-slide-up">
+            <div class="flex items-center mb-6">
+                {% if student.photo %}
+                    <img src="{{ student.photo.url }}" alt="Profile Photo" class="w-20 h-20 rounded-full object-cover mr-4">
+                {% else %}
+                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-user text-blue-600 text-2xl"></i>
+                    </div>
+                {% endif %}
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">{{ student.name }}</h2>
+                    <p class="text-gray-600">
+                        {% if student.institution_type == 'School' %}
+                            Grade {{ student.grade }} | {{ student.institution_name|default:"School" }}
+                        {% else %}
+                            {{ student.level }} - {{ student.degree }} | {{ student.institution_name|default:"College" }}
+                        {% endif %}
+                        | ID: {{ student.student_id }}
+                    </p>
+                </div>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Institution Type</label>
+                        {{ form.institution_type }}
+                        {% if form.institution_type.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.institution_type.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Institution Name</label>
+                        {{ form.institution_name }}
+                        {% if form.institution_name.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.institution_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    {% if student.institution_type == 'School' %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Grade</label>
+                        {{ form.grade }}
+                        {% if form.grade.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.grade.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Level</label>
+                        {{ form.level }}
+                        {% if form.level.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.level.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Degree</label>
+                        {{ form.degree }}
+                        {% if form.degree.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.degree.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Course</label>
+                        {{ form.course }}
+                        {% if form.course.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.course.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                        {{ form.age }}
+                        {% if form.age.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.age.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                        {{ form.date_of_birth }}
+                        {% if form.date_of_birth.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.date_of_birth.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.phone.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Guardian Name</label>
+                        {{ form.guardian_name }}
+                        {% if form.guardian_name.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.guardian_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Profile Photo</label>
+                        {{ form.photo }}
+                        {% if form.photo.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.photo.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition duration-300 pulse-button">
+                        <i class="fas fa-save mr-2"></i>Update Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Academic Performance Section -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mt-6 animate-slide-up">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">
+                <i class="fas fa-chart-line text-green-600 mr-2"></i>Academic Performance
+            </h3>
+
+            {% if student.institution_type == 'School' %}
+                <!-- School Performance -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-800 mb-2">Grade</h4>
+                        <p class="text-2xl font-bold text-blue-600">{{ student.grade|default:"Not set" }}</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-800 mb-2">Percentage</h4>
+                        <p class="text-2xl font-bold text-green-600">
+                            {% if student.grade %}
+                                {% if student.grade == 1 %}85{% elif student.grade == 2 %}87{% elif student.grade == 3 %}82{% elif student.grade == 4 %}90{% elif student.grade == 5 %}88{% elif student.grade == 6 %}85{% elif student.grade == 7 %}92{% elif student.grade == 8 %}89{% elif student.grade == 9 %}91{% elif student.grade == 10 %}87{% elif student.grade == 11 %}94{% elif student.grade == 12 %}96{% else %}N/A{% endif %}%
+                            {% else %}
+                                Not available
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% else %}
+                <!-- College Performance -->
+                {% if analytics %}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-800 mb-2">CGPA</h4>
+                        <p class="text-2xl font-bold text-blue-600">{{ analytics.cgpa|floatformat:2 }}</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-800 mb-2">Current GPA</h4>
+                        <p class="text-2xl font-bold text-green-600">{{ analytics.current_gpa|floatformat:2 }}</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-purple-800 mb-2">Total Credits</h4>
+                        <p class="text-2xl font-bold text-purple-600">{{ analytics.total_credits }}</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h4 class="font-semibold text-gray-800 mb-2">Predicted Final GPA</h4>
+                    <p class="text-lg text-gray-600">{{ analytics.predicted_final_gpa|floatformat:2 }}</p>
+                </div>
+                {% else %}
+                <p class="text-gray-600">Analytics data not available yet.</p>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- AI Learning Insights Section -->
+        {% if analytics %}
+        <div class="bg-white rounded-xl shadow-lg p-6 mt-6 animate-slide-up">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">
+                <i class="fas fa-brain text-purple-600 mr-2"></i>AI Learning Insights
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-purple-800 mb-2">Performance Forecast</h4>
+                    <p class="text-2xl font-bold text-purple-600">
+                        {% if analytics.predicted_final_gpa %}
+                            {{ analytics.predicted_final_gpa|floatformat:2 }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-blue-800 mb-2">Predicted Final Grade</h4>
+                    <p class="text-2xl font-bold text-blue-600">{{ student.get_performance_forecast_grade }}</p>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-red-800 mb-2">Academic Risk Level</h4>
+                    <p class="text-2xl font-bold text-red-600">{{ student.get_dropout_risk_level }}</p>
+                </div>
+            </div>
+
+            {% if analytics.career_recommendations %}
+            <div class="mt-6">
+                <h4 class="font-semibold text-gray-800 mb-3">Recommended Career Paths</h4>
+                <div class="flex flex-wrap gap-2">
+                    {% for career in analytics.career_recommendations|load_json %}
+                    <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">{{ career }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if analytics.recommended_interventions %}
+            <div class="mt-6">
+                <h4 class="font-semibold text-gray-800 mb-3">Recommended Interventions</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                    {% for intervention in analytics.recommended_interventions|load_json %}
+                    <li>{{ intervention }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Attendance Section -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mt-6 animate-slide-up">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">
+                <i class="fas fa-calendar-check text-orange-600 mr-2"></i>Attendance
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-orange-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-orange-800 mb-2">Attendance Percentage</h4>
+                    <p class="text-2xl font-bold text-orange-600">{{ attendance_percentage|floatformat:1 }}%</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-gray-800 mb-2">Recent Records</h4>
+                    <div class="space-y-1">
+                        {% for record in attendance_records %}
+                        <div class="flex justify-between text-sm">
+                            <span>{{ record.date|date:"M d" }}</span>
+                            <span class="{% if record.status == 'Present' %}text-green-600{% elif record.status == 'Absent' %}text-red-600{% else %}text-yellow-600{% endif %}">{{ record.status }}</span>
+                        </div>
+                        {% empty %}
+                        <p class="text-gray-500 text-sm">No attendance records yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- Staff Profile -->
+        <div class="bg-white rounded-xl shadow-lg p-6 animate-slide-up">
+            <div class="flex items-center mb-6">
+                <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                    <i class="fas fa-user-tie text-purple-600 text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">{{ user.get_full_name|default:user.username }}</h2>
+                    <p class="text-gray-600">Staff Member</p>
+                </div>
+            </div>
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                        <input type="text" value="{{ user.username }}" class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" readonly>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" name="email" value="{{ user.email }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <input type="text" name="last_name" value="{{ user.last_name }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition duration-300 pulse-button">
+                        <i class="fas fa-save mr-2"></i>Update Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="mt-6">
+        {% for message in messages %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg animate-fade-in">
+            <i class="fas fa-check-circle mr-2"></i>{{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Floating decorative shapes -->
+    <div class="absolute top-20 left-20 w-20 h-20 bg-gradient-to-r from-blue-200 to-purple-200 rounded-full opacity-60 animate-bounce-in"></div>
+    <div class="absolute top-40 right-32 w-16 h-16 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full opacity-60 animate-bounce-in" style="animation-delay: 0.5s;"></div>
+    <div class="absolute bottom-32 left-32 w-24 h-24 bg-gradient-to-r from-indigo-200 to-blue-200 rounded-full opacity-60 animate-bounce-in" style="animation-delay: 1s;"></div>
+    <div class="absolute bottom-20 right-20 w-12 h-12 bg-gradient-to-r from-pink-200 to-purple-200 rounded-full opacity-60 animate-bounce-in" style="animation-delay: 1.5s;"></div>
+
+    <div class="max-w-md w-full space-y-8 animate-slide-up">
+        <!-- Header Section -->
+        <div class="text-center">
+            <div class="mx-auto w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-2xl transform hover:scale-110 transition duration-300">
+                <i class="fas fa-graduation-cap text-3xl text-white"></i>
+            </div>
+            <h2 class="text-4xl font-bold text-gray-900 mb-2 animate-fade-in">Welcome to ERP Lite</h2>
+            <p class="text-lg text-gray-600 animate-fade-in" style="animation-delay: 0.2s;">Sign in to access your dashboard</p>
+        </div>
+
+        <!-- Login Form Card -->
+        <div class="bg-white/80 backdrop-blur-lg py-8 px-6 shadow-2xl rounded-2xl border border-white/20 animate-bounce-in" style="animation-delay: 0.3s;">
+            <!-- Login Type Selection -->
+            <div class="mb-8">
+                <label class="block text-sm font-semibold text-gray-700 mb-4 text-center">Choose Login Type</label>
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="relative">
+                        <input id="student" name="role" type="radio" value="student" checked class="sr-only peer">
+                        <label for="student" class="flex items-center justify-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all duration-300 hover:shadow-md">
+                            <i class="fas fa-user-graduate text-blue-600 text-xl mr-3"></i>
+                            <span class="font-medium text-blue-800">Student Login</span>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input id="staff" name="role" type="radio" value="staff" class="sr-only peer">
+                        <label for="staff" class="flex items-center justify-center p-4 bg-gradient-to-r from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl cursor-pointer peer-checked:border-purple-500 peer-checked:bg-purple-50 transition-all duration-300 hover:shadow-md">
+                            <i class="fas fa-user-tie text-purple-600 text-xl mr-3"></i>
+                            <span class="font-medium text-purple-800">Staff/Admin Login</span>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input id="institution" name="role" type="radio" value="institution" class="sr-only peer">
+                        <label for="institution" class="flex items-center justify-center p-4 bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-200 rounded-xl cursor-pointer peer-checked:border-green-500 peer-checked:bg-green-50 transition-all duration-300 hover:shadow-md">
+                            <i class="fas fa-university text-green-600 text-xl mr-3"></i>
+                            <span class="font-medium text-green-800">Institution Admin</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Username Field -->
+                <div class="space-y-2">
+                    <label for="username" class="block text-sm font-semibold text-gray-700 flex items-center">
+                        <i class="fas fa-user text-gray-500 mr-2"></i>Username
+                    </label>
+                    <div class="relative">
+                        <input type="text" name="username" id="username" class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your username" required>
+                        <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <p class="text-xs text-gray-500 flex items-center">
+                        <i class="fas fa-info-circle mr-1"></i>For students: Use your Student ID
+                    </p>
+                </div>
+
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-semibold text-gray-700 flex items-center">
+                        <i class="fas fa-lock text-gray-500 mr-2"></i>Password
+                    </label>
+                    <div class="relative">
+                        <input type="password" name="password" id="password" class="w-full px-4 py-3 pl-12 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 bg-gray-50 focus:bg-white" placeholder="Enter your password" required>
+                        <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="password-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sign In Button -->
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 focus:outline-none focus:ring-4 focus:ring-blue-300 pulse-button">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Sign In to Dashboard
+                    </button>
+                </div>
+            </form>
+
+            <!-- Demo Credentials -->
+            <div class="mt-8 p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200">
+                <h4 class="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                    <i class="fas fa-key text-gray-500 mr-2"></i>Demo Credentials
+                </h4>
+                <div class="text-xs text-gray-600 space-y-2">
+                    <div class="bg-white p-2 rounded border">
+                        <strong>Institution Admin:</strong> institution / admin123
+                    </div>
+                    <div class="bg-white p-2 rounded border">
+                        <strong>Staff:</strong> staff1 / pass
+                    </div>
+                    <div class="bg-white p-2 rounded border">
+                        <strong>Student:</strong> student1 / pass
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center">
+            <p class="text-sm text-gray-500 animate-fade-in" style="animation-delay: 0.5s;">
+                Secure login powered by ERP Lite
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const passwordIcon = document.getElementById('password-icon');
+
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.className = 'fas fa-eye';
+    }
+}
+
+// Add some interactive effects
+document.addEventListener('DOMContentLoaded', function() {
+    // Add hover effects to radio button labels
+    const radioLabels = document.querySelectorAll('input[type="radio"] + label');
+    radioLabels.forEach(label => {
+        label.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        label.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Focus effects for inputs
+    const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+        });
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    });
+});
+</script>
+
+<style>
+input[type="text"], input[type="password"] {
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Custom radio button styles */
+input[type="radio"]:checked + label {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+</style>
+{% endblock %}

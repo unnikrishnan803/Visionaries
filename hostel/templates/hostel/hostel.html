@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}Hostel - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8 animate-fade-in">
+        <i class="fas fa-bed text-blue-600 mr-2"></i>Hostel Management
+    </h1>
+
+    <!-- Room Occupancy Overview -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">
+            <i class="fas fa-chart-bar text-green-600 mr-2"></i>Room Occupancy Overview
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for room in rooms %}
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200 hover-lift">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-lg font-semibold text-gray-800">{{ room.room_number }}</h3>
+                    <i class="fas fa-door-open text-blue-600 text-xl"></i>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Capacity: {{ room.capacity }}</span>
+                    <span class="text-sm font-medium {% if room.occupied < room.capacity %}text-green-600{% else %}text-red-600{% endif %}">
+                        Occupied: {{ room.occupied }}
+                    </span>
+                </div>
+                <div class="mt-2 bg-gray-200 rounded-full h-2">
+                    <div class="bg-blue-600 h-2 rounded-full" style="width: {{ room.occupancy_percentage }}%"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if is_staff %}
+    <!-- Allocation Forms -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Student Allocation -->
+        <div class="bg-white rounded-xl shadow-lg p-6 animate-bounce-in">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-user-graduate text-blue-600 mr-2"></i>Allocate Room to Student
+            </h2>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ student_form.student.label }}</label>
+                    {{ student_form.student }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ student_form.room.label }}</label>
+                    {{ student_form.room }}
+                </div>
+                <button type="submit" name="allocate_student" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition duration-300 pulse-button">
+                    <i class="fas fa-plus mr-2"></i>Allocate to Student
+                </button>
+            </form>
+        </div>
+
+        <!-- Staff Allocation -->
+        <div class="bg-white rounded-xl shadow-lg p-6 animate-bounce-in">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-user-tie text-purple-600 mr-2"></i>Allocate Room to Staff
+            </h2>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ staff_form.staff.label }}</label>
+                    {{ staff_form.staff }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ staff_form.room.label }}</label>
+                    {{ staff_form.room }}
+                </div>
+                <button type="submit" name="allocate_staff" class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-purple-600 hover:to-purple-700 transition duration-300 pulse-button">
+                    <i class="fas fa-plus mr-2"></i>Allocate to Staff
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Allocations Tables -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Student Allocations -->
+        <div class="bg-white rounded-xl shadow-lg p-6 animate-slide-up">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-users text-green-600 mr-2"></i>Student Allocations
+            </h2>
+            {% if student_allocations %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="border-b border-gray-200">
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Allocated On</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for alloc in student_allocations %}
+                        <tr class="hover:bg-gray-50 transition duration-200">
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-user text-blue-600"></i>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-900">{{ alloc.student.name }}</span>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4 text-sm text-gray-900">{{ alloc.room.room_number }}</td>
+                            <td class="py-4 px-4 text-sm text-gray-500">{{ alloc.allocated_on|date:"M d, Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <i class="fas fa-bed text-gray-400 text-4xl mb-4"></i>
+                <p class="text-gray-500">No student allocations yet</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Staff Allocations -->
+        <div class="bg-white rounded-xl shadow-lg p-6 animate-slide-up">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">
+                <i class="fas fa-user-tie text-purple-600 mr-2"></i>Staff Allocations
+            </h2>
+            {% if staff_allocations %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="border-b border-gray-200">
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Staff</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Allocated On</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for alloc in staff_allocations %}
+                        <tr class="hover:bg-gray-50 transition duration-200">
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-user-tie text-purple-600"></i>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-900">{{ alloc.staff.username }}</span>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4 text-sm text-gray-900">{{ alloc.room.room_number }}</td>
+                            <td class="py-4 px-4 text-sm text-gray-500">{{ alloc.allocated_on|date:"M d, Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+                <i class="fas fa-bed text-gray-400 text-4xl mb-4"></i>
+                <p class="text-gray-500">No staff allocations yet</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="mt-8">
+        {% for message in messages %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg animate-fade-in">
+            <i class="fas fa-check-circle mr-2"></i>{{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

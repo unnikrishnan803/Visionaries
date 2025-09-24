@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Receipt - {{ payment.receipt_no }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .receipt {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .receipt-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .info-section h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 16px;
+        }
+        .info-section p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .amount {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .amount .label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .amount .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+        .footer p {
+            margin: 5px 0;
+            color: #666;
+            font-size: 12px;
+        }
+        @media print {
+            body { background: white; }
+            .receipt { box-shadow: none; border: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <div class="header">
+            <h1>ERP Lite</h1>
+            <p>Fee Payment Receipt</p>
+        </div>
+
+        <div class="content">
+            <div class="receipt-info">
+                <div class="info-section">
+                    <h3>Student Information</h3>
+                    <p><strong>Name:</strong> {{ payment.student.name }}</p>
+                    <p><strong>Student ID:</strong> {{ payment.student.student_id }}</p>
+                    <p><strong>Email:</strong> {{ payment.student.email }}</p>
+                    <p><strong>Course:</strong> {{ payment.student.course }}</p>
+                </div>
+                <div class="info-section">
+                    <h3>Payment Details</h3>
+                    <p><strong>Receipt No:</strong> {{ payment.receipt_no }}</p>
+                    <p><strong>Payment Date:</strong> {{ payment.paid_on|date:"F d, Y" }}</p>
+                    <p><strong>Payment Time:</strong> {{ payment.paid_on|time:"H:i" }}</p>
+                </div>
+            </div>
+
+            <div class="amount">
+                <div class="label">Amount Paid</div>
+                <div class="value">₹{{ payment.amount }}</div>
+            </div>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+                <p style="text-align: center; color: #666; font-style: italic;">
+                    This is a computer-generated receipt and does not require a signature.
+                </p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>ERP Lite Institution</strong></p>
+            <p>Generated on {{ payment.paid_on|date:"F d, Y \a\t H:i" }}</p>
+            <p>For any queries, contact: admissions@erp-lite.edu | +1 (555) 123-4567</p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-print when opened
+        window.onload = function() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

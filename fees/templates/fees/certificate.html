@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Payment Certificate - {{ payment.student.student_id }}</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .certificate {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border: 3px solid #d4af37;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        .header::before,
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 50px;
+            height: 50px;
+            background: #d4af37;
+            border-radius: 50%;
+        }
+        .header::before { left: 40px; }
+        .header::after { right: 40px; }
+        .header h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 50px 40px;
+            text-align: center;
+        }
+        .main-text {
+            font-size: 24px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .student-info {
+            background: #f8f9fa;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 10px;
+            border-left: 5px solid #d4af37;
+        }
+        .student-info h3 {
+            margin: 0 0 20px 0;
+            color: #2d3748;
+            font-size: 20px;
+        }
+        .info-grid {
+            display: table;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .info-row {
+            display: table-row;
+        }
+        .info-cell {
+            display: table-cell;
+            padding: 8px 0;
+            text-align: left;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #4a5568;
+            width: 150px;
+        }
+        .info-value {
+            color: #2d3748;
+        }
+        .payment-details {
+            background: #e6fffa;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 10px;
+            border: 2px solid #38b2ac;
+        }
+        .payment-details h3 {
+            margin: 0 0 15px 0;
+            color: #2d3748;
+            font-size: 18px;
+        }
+        .amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #38b2ac;
+            margin: 10px 0;
+        }
+        .footer {
+            background: #2d3748;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .signature {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #4a5568;
+        }
+        .signature p {
+            margin: 5px 0;
+            font-style: italic;
+        }
+        @media print {
+            body { background: white; }
+            .certificate { box-shadow: none; border: 2px solid #d4af37; }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <div class="header">
+            <h1>Certificate of Payment</h1>
+            <p>ERP Lite Institution</p>
+        </div>
+
+        <div class="content">
+            <div class="main-text">
+                This is to certify that the following student has successfully completed
+                the fee payment process for the academic session.
+            </div>
+
+            <div class="student-info">
+                <h3>Student Information</h3>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-cell info-label">Student ID:</div>
+                        <div class="info-cell info-value">{{ payment.student.student_id }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-cell info-label">Name:</div>
+                        <div class="info-cell info-value">{{ payment.student.name }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-cell info-label">Course:</div>
+                        <div class="info-cell info-value">{{ payment.student.course }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-cell info-label">Email:</div>
+                        <div class="info-cell info-value">{{ payment.student.email }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="payment-details">
+                <h3>Payment Details</h3>
+                <p><strong>Receipt Number:</strong> {{ payment.receipt_no }}</p>
+                <p><strong>Payment Date:</strong> {{ payment.paid_on|date:"F d, Y" }}</p>
+                <p><strong>Amount Paid:</strong></p>
+                <div class="amount">₹{{ payment.amount }}</div>
+                <p><strong>Status:</strong> Confirmed</p>
+                {% if payment.confirmed_by %}
+                <p><strong>Confirmed By:</strong> {{ payment.confirmed_by }}</p>
+                {% endif %}
+            </div>
+
+            <div class="main-text">
+                This certificate confirms that all fee obligations have been fulfilled
+                and the student is eligible for all academic services.
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="signature">
+                <p>Authorized Signature</p>
+                <p>ERP Lite Administration</p>
+            </div>
+            <p>Certificate generated on {{ payment.confirmed_on|default:payment.paid_on|date:"F d, Y \a\t H:i" }}</p>
+            <p>For verification, contact: admissions@erp-lite.edu | +1 (555) 123-4567</p>
+        </div>
+    </div>
+
+    <script>
+        // Auto-print when opened
+        window.onload = function() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Dashboard - ERP Lite{% endblock %}
+
+{% block content %}
+<!-- Top Bar -->
+<div class="bg-white shadow p-4 flex justify-between items-center">
+    <div class="flex items-center">
+        <h1 class="text-xl font-bold">ERP Lite Institution</h1>
+    </div>
+    <div class="flex items-center space-x-4">
+        <button class="text-gray-600 hover:text-gray-800">
+            <i class="fas fa-bell text-xl"></i>
+        </button>
+        <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gray-300 rounded-full"></div>
+            <span>{{ user.username }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="flex h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <div class="w-64 bg-blue-800 text-white">
+        <div class="p-4">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-gray-300 rounded-full mr-3"></div>
+                <div>
+                    <h2 class="text-lg font-semibold">{{ user.username }}</h2>
+                    <p class="text-sm">Staff/Admin</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li class="mb-2"><a href="#" class="block py-2 px-4 rounded hover:bg-blue-700">Overview</a></li>
+                    <li class="mb-2"><a href="{% url 'admissions:admissions' %}" class="block py-2 px-4 rounded hover:bg-blue-700">Admissions</a></li>
+                    <li class="mb-2"><a href="{% url 'admissions:manage_attendance' %}" class="block py-2 px-4 rounded hover:bg-blue-700">Attendance</a></li>
+                    <li class="mb-2"><a href="{% url 'admissions:manage_analytics' %}" class="block py-2 px-4 rounded hover:bg-blue-700">Analytics</a></li>
+                    <li class="mb-2"><a href="{% url 'fees:fees' %}" class="block py-2 px-4 rounded hover:bg-blue-700">Fees</a></li>
+                    <li class="mb-2"><a href="{% url 'hostel:hostel' %}" class="block py-2 px-4 rounded hover:bg-blue-700">Hostel</a></li>
+                    <li class="mb-2"><a href="{% url 'exams:exams' %}" class="block py-2 px-4 rounded hover:bg-blue-700">Exams</a></li>
+                    <li class="mb-2"><a href="#" class="block py-2 px-4 rounded hover:bg-blue-700">Reports</a></li>
+                    <li class="mb-2">
+                        <form method="post" action="{% url 'main:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="block py-2 px-4 rounded hover:bg-blue-700 bg-transparent border-none text-white text-left w-full">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
+        <h1 class="text-2xl font-bold mb-6">Staff Dashboard</h1>
+
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow p-4 flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold">Total Students</h3>
+                    <p class="text-3xl font-bold text-blue-600">{{ student_count }}</p>
+                </div>
+                <i class="fas fa-users text-3xl text-gray-400"></i>
+            </div>
+            <div class="bg-white rounded-xl shadow p-4 flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold">Pending Admissions</h3>
+                    <p class="text-3xl font-bold text-orange-600">{{ pending_admissions }}</p>
+                </div>
+                <i class="fas fa-clipboard-list text-3xl text-gray-400"></i>
+            </div>
+            <div class="bg-white rounded-xl shadow p-4 flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold">Fees This Month</h3>
+                    <p class="text-3xl font-bold text-green-600">₹{{ fees_month }}</p>
+                </div>
+                <i class="fas fa-rupee-sign text-3xl text-gray-400"></i>
+            </div>
+            <div class="bg-white rounded-xl shadow p-4 flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold">Hostel Occupancy</h3>
+                    <p class="text-3xl font-bold text-purple-600">{{ hostel_occupancy }}%</p>
+                </div>
+                <i class="fas fa-bed text-3xl text-gray-400"></i>
+            </div>
+        </div>
+
+        <!-- Management Tabs -->
+        <div class="mb-6">
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button onclick="showTab('overview')" class="tab-button active bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Overview
+                </button>
+                <button onclick="showTab('students')" class="tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-300">
+                    <i class="fas fa-users mr-2"></i>Student Management
+                </button>
+                <button onclick="showTab('fees')" class="tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-300">
+                    <i class="fas fa-money-bill-wave mr-2"></i>Fee Management
+                </button>
+                <button onclick="showTab('hostel')" class="tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-300">
+                    <i class="fas fa-bed mr-2"></i>Hostel Management
+                </button>
+                <button onclick="showTab('exams')" class="tab-button bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-300">
+                    <i class="fas fa-graduation-cap mr-2"></i>Exam Management
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div id="overview-tab" class="tab-content">
+            <!-- AI Analytics Overview -->
+            <div class="bg-white rounded-xl shadow p-6 mb-6">
+                <h3 class="text-lg font-bold mb-4 flex items-center">
+                    <i class="fas fa-brain text-purple-600 mr-2"></i>AI Analytics Overview
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-semibold text-blue-800">Average CGPA</h4>
+                            <i class="fas fa-chart-line text-blue-600"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-blue-600">{{ avg_gpa }}</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-semibold text-green-800">Average Attendance</h4>
+                            <i class="fas fa-calendar-check text-green-600"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-green-600">{{ avg_attendance }}%</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-red-50 to-red-100 p-4 rounded-lg border border-red-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-semibold text-red-800">High Risk Students</h4>
+                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-red-600">{{ high_risk_students }}</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-sm font-semibold text-yellow-800">Students Needing Attention</h4>
+                            <i class="fas fa-users text-yellow-600"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-yellow-600">{{ intervention_needed|length }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h3 class="text-lg font-bold mb-4">Recent Activity</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center p-3 bg-blue-50 rounded-lg">
+                            <i class="fas fa-user-plus text-blue-600 mr-3"></i>
+                            <div>
+                                <p class="font-semibold">New Student Registration</p>
+                                <p class="text-sm text-gray-600">John Doe applied for admission</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-green-50 rounded-lg">
+                            <i class="fas fa-rupee-sign text-green-600 mr-3"></i>
+                            <div>
+                                <p class="font-semibold">Fee Payment Received</p>
+                                <p class="text-sm text-gray-600">₹25,000 from Test Student</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-purple-50 rounded-lg">
+                            <i class="fas fa-bed text-purple-600 mr-3"></i>
+                            <div>
+                                <p class="font-semibold">Room Allocation</p>
+                                <p class="text-sm text-gray-600">Room 101 allocated to new student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Students Needing Intervention -->
+                {% if intervention_needed %}
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>Students Needing Attention
+                    </h3>
+                    <div class="space-y-3">
+                        {% for student in intervention_needed %}
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-red-600"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-red-800">{{ student.name }}</p>
+                                    <p class="text-sm text-red-600">Risk: {{ student.dropout_percentage }}%</p>
+                                </div>
+                            </div>
+                            <a href="{% url 'admissions:edit_student' student.id %}" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition duration-300">
+                                View
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h3 class="text-lg font-bold mb-4">Quick Actions</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <a href="{% url 'admissions:admissions' %}" class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg text-center transition duration-300">
+                            <i class="fas fa-plus text-2xl mb-2"></i>
+                            <p class="font-semibold">Add Student</p>
+                        </a>
+                        <a href="{% url 'admissions:manage_attendance' %}" class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg text-center transition duration-300">
+                            <i class="fas fa-calendar-check text-2xl mb-2"></i>
+                            <p class="font-semibold">Record Attendance</p>
+                        </a>
+                        <a href="{% url 'admissions:manage_analytics' %}" class="bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg text-center transition duration-300">
+                            <i class="fas fa-chart-line text-2xl mb-2"></i>
+                            <p class="font-semibold">Update Analytics</p>
+                        </a>
+                        <a href="{% url 'fees:fees' %}" class="bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-lg text-center transition duration-300">
+                            <i class="fas fa-money-bill-wave text-2xl mb-2"></i>
+                            <p class="font-semibold">Record Fee</p>
+                        </a>
+                        <a href="{% url 'hostel:hostel' %}" class="bg-indigo-500 hover:bg-indigo-600 text-white p-4 rounded-lg text-center transition duration-300">
+                            <i class="fas fa-bed text-2xl mb-2"></i>
+                            <p class="font-semibold">Allocate Room</p>
+                        </a>
+                        <a href="{% url 'exams:exams' %}" class="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg text-center transition duration-300">
+                            <i class="fas fa-graduation-cap text-2xl mb-2"></i>
+                            <p class="font-semibold">Add Exam</p>
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="students-tab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Student Management</h2>
+                    <a href="{% url 'admissions:admissions' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-plus mr-2"></i>Add New Student
+                    </a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class/Degree</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CGPA</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for student in students %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ student.student_id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ student.institution_name|default:"N/A" }}
+                                    <br><small class="text-xs">{{ student.institution_type }}</small>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {% if student.institution_type == 'School' %}
+                                        Grade {{ student.grade }}
+                                    {% else %}
+                                        {{ student.level }} - {{ student.degree }}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {% if student.analytics %}
+                                        {{ student.analytics.cgpa|floatformat:2 }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 text-xs rounded-full font-medium
+                                        {% if student.status == 'Approved' %}bg-green-100 text-green-800
+                                        {% elif student.status == 'Admitted' %}bg-blue-100 text-blue-800
+                                        {% elif student.status == 'Pending' %}bg-yellow-100 text-yellow-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ student.status }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{% url 'admissions:edit_student' student.id %}" class="text-yellow-600 hover:text-yellow-900 mr-4">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{% url 'admissions:delete_student' student.id %}" class="text-red-600 hover:text-red-900">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="fees-tab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Fee Management</h2>
+                    <button class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-plus mr-2"></i>Record New Payment
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receipt No</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paid On</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for fee in fees %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    {{ fee.student.name }} <span class="text-gray-500">({{ fee.student.student_id }})</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">₹{{ fee.amount }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 text-xs rounded-full font-medium
+                                        {% if fee.status == 'Confirmed' %}bg-green-100 text-green-800
+                                        {% elif fee.status == 'Pending' %}bg-yellow-100 text-yellow-800
+                                        {% else %}bg-red-100 text-red-800{% endif %}">
+                                        {{ fee.get_status_display }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ fee.receipt_no|default:"N/A" }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ fee.paid_on|date:"M d, Y" }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    {% if fee.status == 'Pending' %}
+                                    <a href="#" class="text-blue-600 hover:text-blue-900 mr-4">
+                                        <i class="fas fa-check"></i> Confirm
+                                    </a>
+                                    {% endif %}
+                                    <a href="#" class="text-yellow-600 hover:text-yellow-900 mr-4">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="#" class="text-red-600 hover:text-red-900">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="hostel-tab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Hostel Management</h2>
+                    <a href="{% url 'hostel:hostel' %}" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-plus mr-2"></i>Allocate Room
+                    </a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-blue-800">Total Rooms</h3>
+                            <i class="fas fa-building text-blue-600 text-2xl"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-blue-600">{{ room_count }}</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-green-800">Occupied</h3>
+                            <i class="fas fa-bed text-green-600 text-2xl"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-green-600">{{ allocation_count }}</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-purple-800">Occupancy Rate</h3>
+                            <i class="fas fa-chart-pie text-purple-600 text-2xl"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-purple-600">{{ hostel_occupancy }}%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exams-tab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Exam Management</h2>
+                    <a href="{% url 'exams:exams' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-plus mr-2"></i>Add Exam/Marks
+                    </a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for exam in upcoming_exams %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ exam.subject }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ exam.date }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ exam.time }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="#" class="text-yellow-600 hover:text-yellow-900 mr-4">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="#" class="text-red-600 hover:text-red-900">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showTab(tabName) {
+    // Hide all tab contents
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => {
+        content.classList.add('hidden');
+    });
+
+    // Remove active class from all buttons
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(button => {
+        button.classList.remove('active', 'bg-blue-600', 'text-white');
+        button.classList.add('bg-gray-200', 'text-gray-700');
+    });
+
+    // Show selected tab content
+    const selectedTab = document.getElementById(tabName + '-tab');
+    if (selectedTab) {
+        selectedTab.classList.remove('hidden');
+    }
+
+    // Add active class to clicked button
+    const activeButton = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+    if (activeButton) {
+        activeButton.classList.add('active', 'bg-blue-600', 'text-white');
+        activeButton.classList.remove('bg-gray-200', 'text-gray-700');
+    }
+}
+
+// Set default tab on page load
+document.addEventListener('DOMContentLoaded', function() {
+    showTab('overview');
+});
+</script>
+{% endblock %}

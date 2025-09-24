@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Student - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg">
+    <div class="text-center mb-8">
+        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900">Delete Student</h2>
+        <p class="mt-2 text-gray-600">Are you sure you want to delete <strong>{{ student.name }}</strong>?</p>
+        <p class="mt-1 text-sm text-red-600">This action cannot be undone.</p>
+    </div>
+
+    <div class="bg-gray-50 p-4 rounded-lg mb-6">
+        <h3 class="font-semibold text-gray-900 mb-2">Student Details:</h3>
+        <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+        <p><strong>Name:</strong> {{ student.name }}</p>
+        <p><strong>Email:</strong> {{ student.email }}</p>
+        <p><strong>Course:</strong> {{ student.course }}</p>
+        <p><strong>Status:</strong> {{ student.status }}</p>
+    </div>
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="flex justify-end space-x-4">
+            <a href="{% url 'dashboard:dashboard' %}" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300">
+                Cancel
+            </a>
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                Delete Student
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

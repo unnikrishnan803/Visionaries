@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - ERP Lite{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Animated Background -->
+<div class="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0">
+        <!-- Floating geometric shapes -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full opacity-20 animate-float"></div>
+        <div class="absolute top-40 right-20 w-24 h-24 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full opacity-20 animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-40 left-20 w-40 h-40 bg-gradient-to-r from-indigo-400 to-blue-500 rounded-full opacity-20 animate-float" style="animation-delay: 4s;"></div>
+        <div class="absolute bottom-20 right-10 w-28 h-28 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full opacity-20 animate-float" style="animation-delay: 1s;"></div>
+
+        <!-- Animated grid pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white to-transparent animate-pulse"></div>
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white to-transparent animate-pulse" style="animation-delay: 1s;"></div>
+        </div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
+        <div class="text-center max-w-6xl mx-auto">
+            <!-- Animated Logo/Icon -->
+            <div class="mb-8 animate-bounce-in">
+                <div class="inline-block p-6 bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl">
+                    <i class="fas fa-graduation-cap text-8xl text-white animate-pulse"></i>
+                </div>
+            </div>
+
+            <!-- Main Heading with Gradient Text -->
+            <h1 class="text-6xl md:text-7xl font-bold mb-6 animate-fade-in">
+                <span class="bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent animate-gradient">
+                    Welcome to ERP Lite
+                </span>
+            </h1>
+
+            <!-- Subtitle with Badge -->
+            <div class="mb-8 animate-slide-up" style="animation-delay: 0.3s;">
+                <div class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 backdrop-blur-lg rounded-full text-white text-lg font-semibold shadow-lg">
+                    <i class="fas fa-trophy text-yellow-300 mr-2"></i>
+                    Ranked #12 in the Country - Excellence in Education
+                </div>
+            </div>
+
+            <!-- Description -->
+            <p class="text-xl md:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto animate-fade-in" style="animation-delay: 0.5s;">
+                Transform your educational institution with our comprehensive ERP solution
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-6 justify-center animate-slide-up" style="animation-delay: 0.7s;">
+                <a href="{% url 'admissions:admissions' %}"
+                   class="group bg-white text-blue-600 hover:bg-blue-50 font-bold py-4 px-8 rounded-2xl shadow-2xl transition-all duration-300 hover-lift transform hover:scale-105 hover:shadow-3xl">
+                    <i class="fas fa-user-plus mr-2 group-hover:animate-bounce"></i>
+                    Apply for Admissions 2025
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                </a>
+                <a href="{% url 'main:login' %}"
+                   class="group bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 font-bold py-4 px-8 rounded-2xl shadow-lg transition-all duration-300 hover-lift transform hover:scale-105">
+                    <i class="fas fa-sign-in-alt mr-2 group-hover:animate-bounce"></i>
+                    Login to Dashboard
+                </a>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <div class="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+                    <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Services Section -->
+<div class="py-24 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-blue-200 to-purple-300 rounded-full opacity-10 animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-48 h-48 bg-gradient-to-r from-purple-200 to-pink-300 rounded-full opacity-10 animate-float" style="animation-delay: 3s;"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-r from-indigo-200 to-blue-300 rounded-full opacity-10 animate-float" style="animation-delay: 1.5s;"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Section Header -->
+        <div class="text-center mb-20 animate-slide-up">
+            <div class="inline-block p-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl mb-6">
+                <i class="fas fa-cogs text-4xl text-blue-600"></i>
+            </div>
+            <h2 class="text-5xl font-bold text-gray-900 mb-6">Our Services</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Everything you need for a seamless academic experience with cutting-edge technology</p>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <!-- Service Card 1 -->
+            <div class="group bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover-lift animate-bounce-in border border-gray-100">
+                <div class="relative mb-8">
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-user-plus text-3xl text-white"></i>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-star text-xs text-white"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">Admissions</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">Apply for admission online with our streamlined, user-friendly process that makes enrollment a breeze.</p>
+                <a href="{% url 'admissions:admissions' %}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold transition-all duration-300 group-hover:translate-x-2">
+                    Apply Now
+                    <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                </a>
+            </div>
+
+            <!-- Service Card 2 -->
+            <div class="group bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover-lift animate-bounce-in border border-gray-100" style="animation-delay: 0.2s;">
+                <div class="relative mb-8">
+                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-money-bill-wave text-3xl text-white"></i>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-shield-alt text-xs text-white"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors duration-300">Fees Management</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">Pay fees securely online and track your complete payment history with detailed receipts.</p>
+                <a href="{% url 'fees:fees' %}" class="inline-flex items-center text-green-600 hover:text-green-800 font-semibold transition-all duration-300 group-hover:translate-x-2">
+                    Manage Fees
+                    <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                </a>
+            </div>
+
+            <!-- Service Card 3 -->
+            <div class="group bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover-lift animate-bounce-in border border-gray-100" style="animation-delay: 0.4s;">
+                <div class="relative mb-8">
+                    <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-bed text-3xl text-white"></i>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-home text-xs text-white"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors duration-300">Hostel</h3>
+                <p class="text-gray-600 mb-6 leading-relaxed">Check your room allocation, manage hostel facilities, and enjoy comfortable living spaces.</p>
+                <a href="{% url 'hostel:hostel' %}" class="inline-flex items-center text-purple-600 hover:text-purple-800 font-semibold transition-all duration-300 group-hover:translate-x-2">
+                    View Hostel
+                    <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform duration-300"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Additional Services -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in">
+                <i class="fas fa-graduation-cap text-3xl text-indigo-600 mb-4"></i>
+                <h4 class="font-bold text-gray-900 mb-2">Exams</h4>
+                <p class="text-sm text-gray-600">Manage examinations and results</p>
+            </div>
+            <div class="text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in" style="animation-delay: 0.1s;">
+                <i class="fas fa-chart-line text-3xl text-green-600 mb-4"></i>
+                <h4 class="font-bold text-gray-900 mb-2">Reports</h4>
+                <p class="text-sm text-gray-600">Generate detailed analytics</p>
+            </div>
+            <div class="text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in" style="animation-delay: 0.2s;">
+                <i class="fas fa-users-cog text-3xl text-blue-600 mb-4"></i>
+                <h4 class="font-bold text-gray-900 mb-2">Staff Portal</h4>
+                <p class="text-sm text-gray-600">Administrative tools</p>
+            </div>
+            <div class="text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-fade-in" style="animation-delay: 0.3s;">
+                <i class="fas fa-mobile-alt text-3xl text-purple-600 mb-4"></i>
+                <h4 class="font-bold text-gray-900 mb-2">Mobile App</h4>
+                <p class="text-sm text-gray-600">Access on the go</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="py-24 bg-gradient-to-br from-white via-blue-50 to-purple-50 relative overflow-hidden">
+    <!-- Animated Background -->
+    <div class="absolute inset-0">
+        <div class="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-blue-200 to-purple-300 rounded-full opacity-5 animate-float"></div>
+        <div class="absolute bottom-20 left-20 w-64 h-64 bg-gradient-to-r from-purple-200 to-pink-300 rounded-full opacity-5 animate-float" style="animation-delay: 2s;"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-20 animate-slide-up">
+            <div class="inline-block p-4 bg-gradient-to-r from-purple-100 to-blue-100 rounded-2xl mb-6">
+                <i class="fas fa-star text-4xl text-purple-600"></i>
+            </div>
+            <h2 class="text-5xl font-bold text-gray-900 mb-6">Why Choose ERP Lite?</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Experience excellence in every aspect of your academic journey with our cutting-edge platform</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Feature 1 -->
+            <div class="group text-center bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover-lift animate-bounce-in border border-gray-100">
+                <div class="relative mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 rounded-3xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300 transform group-hover:rotate-12">
+                        <i class="fas fa-bolt text-3xl text-white"></i>
+                    </div>
+                    <div class="absolute -top-3 -right-3 w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-zap text-sm text-white"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-yellow-600 transition-colors duration-300">Lightning Fast</h3>
+                <p class="text-gray-600 leading-relaxed">Streamlined processes deliver instant results with blazing-fast performance</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="group text-center bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover-lift animate-bounce-in border border-gray-100" style="animation-delay: 0.2s;">
+                <div class="relative mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-r from-green-400 via-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-shield-alt text-3xl text-white"></i>
+                    </div>
+                    <div class="absolute -top-3 -right-3 w-10 h-10 bg-green-400 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-lock text-sm text-white"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-green-600 transition-colors duration-300">Bank-Level Security</h3>
+                <p class="text-gray-600 leading-relaxed">Your data is protected with enterprise-grade encryption and security measures</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="group text-center bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover-lift animate-bounce-in border border-gray-100" style="animation-delay: 0.4s;">
+                <div class="relative mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-cubes text-3xl text-white"></i>
+                    </div>
+                    <div class="absolute -top-3 -right-3 w-10 h-10 bg-purple-400 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-puzzle-piece text-sm text-white"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors duration-300">All-in-One Solution</h3>
+                <p class="text-gray-600 leading-relaxed">Complete academic management in one unified, powerful platform</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="group text-center bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover-lift animate-bounce-in border border-gray-100" style="animation-delay: 0.6s;">
+                <div class="relative mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-r from-pink-400 via-pink-500 to-red-500 rounded-3xl flex items-center justify-center mx-auto shadow-xl group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-heart text-3xl text-white"></i>
+                    </div>
+                    <div class="absolute -top-3 -right-3 w-10 h-10 bg-pink-400 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-smile text-sm text-white"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-pink-600 transition-colors duration-300">User-Centric Design</h3>
+                <p class="text-gray-600 leading-relaxed">Intuitive interface crafted with your experience and comfort in mind</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action Section -->
+<div class="py-24 bg-gradient-to-r from-blue-600 via-purple-700 to-indigo-800 relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-10 left-10 w-40 h-40 bg-white bg-opacity-5 rounded-full animate-float"></div>
+        <div class="absolute bottom-10 right-10 w-32 h-32 bg-white bg-opacity-5 rounded-full animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white bg-opacity-5 rounded-full animate-float" style="animation-delay: 1s;"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="animate-slide-up">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Transform Your Institution?</h2>
+            <p class="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">Join thousands of educational institutions already using ERP Lite to streamline their operations and enhance student experience.</p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+                <a href="{% url 'admissions:admissions' %}"
+                   class="bg-white text-blue-600 hover:bg-blue-50 font-bold py-4 px-8 rounded-2xl shadow-2xl transition-all duration-300 hover-lift transform hover:scale-105 animate-bounce-in">
+                    <i class="fas fa-rocket mr-2"></i>Start Your Journey
+                </a>
+                <a href="{% url 'main:login' %}"
+                   class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 font-bold py-4 px-8 rounded-2xl shadow-lg transition-all duration-300 hover-lift transform hover:scale-105 animate-bounce-in" style="animation-delay: 0.2s;">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Access Dashboard
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="animate-fade-in">
+                    <div class="text-3xl font-bold text-white mb-2">10K+</div>
+                    <div class="text-blue-200">Students</div>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="text-3xl font-bold text-white mb-2">500+</div>
+                    <div class="text-blue-200">Institutions</div>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="text-3xl font-bold text-white mb-2">99.9%</div>
+                    <div class="text-blue-200">Uptime</div>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="text-3xl font-bold text-white mb-2">24/7</div>
+                    <div class="text-blue-200">Support</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

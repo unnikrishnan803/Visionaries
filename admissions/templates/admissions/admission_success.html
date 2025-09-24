@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Application Submitted - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg text-center">
+    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+    </div>
+
+    <h2 class="text-3xl font-bold text-gray-900 mb-4">Application Submitted Successfully!</h2>
+    <p class="text-lg text-gray-600 mb-8">Congratulations! Your admission application has been received and processed. You are now admitted to ERP Lite.</p>
+
+    <div class="bg-gray-50 rounded-lg p-6 mb-8">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Your Login Credentials</h3>
+        <div class="space-y-3 text-left">
+            <div class="flex justify-between">
+                <span class="font-medium text-gray-700">Student ID:</span>
+                <span class="text-gray-900 font-mono">{{ student.student_id }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="font-medium text-gray-700">Username (Student ID):</span>
+                <span class="text-gray-900 font-mono">{{ student.student_id }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="font-medium text-gray-700">Password:</span>
+                <span class="text-gray-900 font-mono">student123</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+        <h4 class="text-lg font-semibold text-blue-900 mb-2">Important Notes:</h4>
+        <ul class="text-blue-800 text-left space-y-1">
+            <li>• Please save these credentials securely</li>
+            <li>• You can change your password after first login</li>
+            <li>• Use your email as username to log in</li>
+            <li>• Access your dashboard for fees, hostel, and exam information</li>
+        </ul>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{% url 'main:login' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300">
+            Login Now
+        </a>
+        <a href="{% url 'main:home' %}" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300">
+            Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}

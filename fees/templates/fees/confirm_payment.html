@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Payment - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-900">Confirm Payment</h2>
+        <p class="mt-2 text-gray-600">Review and confirm the payment details</p>
+    </div>
+
+    <div class="bg-gray-50 p-6 rounded-lg mb-8">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Payment Details</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-gray-600">Student Name:</p>
+                <p class="font-medium">{{ payment.student.name }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Student ID:</p>
+                <p class="font-medium">{{ payment.student.student_id }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Amount:</p>
+                <p class="font-medium text-green-600">₹{{ payment.amount }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Receipt No:</p>
+                <p class="font-medium">{{ payment.receipt_no }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Payment Date:</p>
+                <p class="font-medium">{{ payment.paid_on|date:"M d, Y" }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Current Status:</p>
+                <span class="px-2 py-1 rounded-full text-xs font-medium
+                    {% if payment.status == 'Confirmed' %}bg-green-100 text-green-800{% elif payment.status == 'Pending' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">
+                    {{ payment.get_status_display }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {% if payment.status == 'Pending' %}
+    <div class="flex justify-center space-x-4">
+        <form method="post" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="confirm">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                Confirm Payment
+            </button>
+        </form>
+        <form method="post" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="reject">
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                Reject Payment
+            </button>
+        </form>
+    </div>
+    {% else %}
+    <div class="text-center">
+        <p class="text-gray-600 mb-4">This payment has already been {{ payment.status|lower }}ed.</p>
+        {% if payment.confirmed_by %}
+        <p class="text-sm text-gray-500">Confirmed by: {{ payment.confirmed_by }} on {{ payment.confirmed_on|date:"M d, Y \a\t H:i" }}</p>
+        {% endif %}
+        <a href="{% url 'dashboard:dashboard' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300">
+            Back to Dashboard
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

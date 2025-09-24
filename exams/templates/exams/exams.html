@@ -1,0 +1,570 @@
+{% extends 'base.html' %}
+
+{% block title %}Exams - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    {% if is_student %}
+        <!-- Student View -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-6 animate-fade-in">
+                <i class="fas fa-graduation-cap text-blue-600 mr-2"></i>Your Academic Results
+            </h1>
+
+            <!-- CGPA Overview -->
+            {% if cgpa %}
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-2">Overall CGPA</h2>
+                        <p class="text-blue-100">Cumulative Grade Point Average</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-5xl font-bold mb-2">{{ cgpa }}</div>
+                        <p class="text-blue-100">{{ total_credits }} Credits Earned</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Semester Results -->
+            {% if semester_results %}
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-bounce-in">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-book-open text-indigo-600 mr-2"></i>Semester Results
+                </h2>
+                <div class="space-y-6">
+                    {% regroup semester_results by semester as semester_groups %}
+                    {% for semester_group in semester_groups %}
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">{{ semester_group.grouper.name }} ({{ semester_group.grouper.academic_year }})</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead>
+                                    <tr class="border-b border-gray-200">
+                                        <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase">Subject</th>
+                                        <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase">Credits</th>
+                                        <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase">Marks</th>
+                                        <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase">Grade</th>
+                                        <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase">Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for result in semester_group.list %}
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="py-2 px-4 text-sm font-medium text-gray-900">{{ result.subject.name }}</td>
+                                        <td class="py-2 px-4 text-sm text-gray-600">{{ result.credits_earned }}</td>
+                                        <td class="py-2 px-4 text-sm font-semibold text-gray-900">{{ result.marks_obtained }}/100</td>
+                                        <td class="py-2 px-4">
+                                            <span class="px-2 py-1 text-xs rounded-full {% if result.grade == 'A' %}bg-green-100 text-green-800{% elif result.grade == 'B' %}bg-blue-100 text-blue-800{% elif result.grade == 'C' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                                {{ result.grade }}
+                                            </span>
+                                        </td>
+                                        <td class="py-2 px-4 text-sm font-semibold text-gray-900">{{ result.grade_points }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Upcoming Exams -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-calendar-alt text-green-600 mr-2"></i>Upcoming Exams
+                </h2>
+                {% if exams %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for exam in exams %}
+                    <div class="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg border border-green-200 hover-lift animate-bounce-in">
+                        <div class="flex items-center mb-2">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-book text-green-600"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-800">{{ exam.subject }}</h3>
+                        </div>
+                        <div class="ml-13">
+                            <p class="text-sm text-gray-600"><i class="fas fa-calendar mr-1"></i>{{ exam.date }}</p>
+                            <p class="text-sm text-gray-600"><i class="fas fa-clock mr-1"></i>{{ exam.time }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <i class="fas fa-calendar-times text-gray-400 text-4xl mb-4"></i>
+                    <p class="text-gray-500">No upcoming exams</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Exam Marks -->
+            <div class="bg-white rounded-xl shadow-lg p-6 animate-bounce-in">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-chart-line text-purple-600 mr-2"></i>Exam Marks
+                </h2>
+                {% if marks %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exam</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marks</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for mark in marks %}
+                            <tr class="hover:bg-gray-50 transition duration-200">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-graduation-cap text-purple-600"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-900">{{ mark.exam.subject }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-sm font-semibold text-gray-900">{{ mark.marks }}/100</td>
+                                <td class="py-4 px-4">
+                                    <span class="px-2 py-1 text-xs rounded-full {% if mark.grade == 'A' %}bg-green-100 text-green-800{% elif mark.grade == 'B' %}bg-blue-100 text-blue-800{% elif mark.grade == 'C' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                        {{ mark.grade }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <i class="fas fa-graduation-cap text-gray-400 text-4xl mb-4"></i>
+                    <p class="text-gray-500">No exam marks available yet</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <!-- Staff View -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-6 animate-fade-in">
+                <i class="fas fa-cogs text-blue-600 mr-2"></i>Exam Management
+            </h1>
+
+            <!-- Add Exam Form -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-plus-circle text-blue-600 mr-2"></i>Add New Exam
+                </h2>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                            {{ exam_form.subject }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                            {{ exam_form.date }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                            {{ exam_form.time }}
+                        </div>
+                    </div>
+                    <button type="submit" name="add_exam" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition duration-300 pulse-button">
+                        <i class="fas fa-plus mr-2"></i>Add Exam
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Semester Form -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-calendar-plus text-indigo-600 mr-2"></i>Add New Semester
+                </h2>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Semester Name</label>
+                            {{ semester_form.name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Academic Year</label>
+                            {{ semester_form.academic_year }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Active Semester</label>
+                            {{ semester_form.is_active }}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                            {{ semester_form.start_date }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                            {{ semester_form.end_date }}
+                        </div>
+                    </div>
+                    <button type="submit" name="add_semester" class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-2 rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition duration-300 pulse-button">
+                        <i class="fas fa-plus mr-2"></i>Add Semester
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Subject Form -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-bounce-in">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-book text-teal-600 mr-2"></i>Add Subject
+                </h2>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Subject Code</label>
+                            {{ subject_form.code }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Subject Name</label>
+                            {{ subject_form.name }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Credits</label>
+                            {{ subject_form.credits }}
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                            {{ subject_form.semester }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Course Type</label>
+                            {{ subject_form.course_type }}
+                        </div>
+                    </div>
+                    <button type="submit" name="add_subject" class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-2 rounded-lg hover:from-teal-600 hover:to-teal-700 transition duration-300 pulse-button">
+                        <i class="fas fa-plus mr-2"></i>Add Subject
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Semester Result Form -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-graduation-cap text-orange-600 mr-2"></i>Add Semester Result
+                </h2>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Student</label>
+                            {{ result_form.student }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                            {{ result_form.semester }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                            {{ result_form.subject }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Marks (0-100)</label>
+                            {{ result_form.marks_obtained }}
+                        </div>
+                    </div>
+                    <button type="submit" name="add_semester_result" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2 rounded-lg hover:from-orange-600 hover:to-orange-700 transition duration-300 pulse-button">
+                        <i class="fas fa-save mr-2"></i>Add Semester Result
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Mark Form -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-bounce-in">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-edit text-green-600 mr-2"></i>Add Exam Mark
+                </h2>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Student</label>
+                            {{ mark_form.student }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Exam</label>
+                            {{ mark_form.exam }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Marks</label>
+                            {{ mark_form.marks }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Grade</label>
+                            {{ mark_form.grade }}
+                        </div>
+                    </div>
+                    <button type="submit" name="add_mark" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition duration-300 pulse-button">
+                        <i class="fas fa-save mr-2"></i>Add Exam Mark
+                    </button>
+                </form>
+            </div>
+
+            <!-- All Semesters -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-calendar text-cyan-600 mr-2"></i>All Semesters
+                </h2>
+                {% if semesters %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Academic Year</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for semester in semesters %}
+                            <tr class="hover:bg-gray-50 transition duration-200">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-calendar text-cyan-600"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-900">{{ semester.name }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ semester.academic_year }}</td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ semester.start_date }}</td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ semester.end_date }}</td>
+                                <td class="py-4 px-4">
+                                    <span class="px-2 py-1 text-xs rounded-full {% if semester.is_active %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {% if semester.is_active %}Active{% else %}Inactive{% endif %}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <i class="fas fa-calendar text-gray-400 text-4xl mb-4"></i>
+                    <p class="text-gray-500">No semesters created yet</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- All Subjects -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-bounce-in">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-book text-emerald-600 mr-2"></i>All Subjects
+                </h2>
+                {% if subjects %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semester</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Credits</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for subject in subjects %}
+                            <tr class="hover:bg-gray-50 transition duration-200">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-hashtag text-emerald-600"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-900">{{ subject.code }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-sm font-medium text-gray-900">{{ subject.name }}</td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ subject.semester.name }}</td>
+                                <td class="py-4 px-4 text-sm font-semibold text-gray-900">{{ subject.credits }}</td>
+                                <td class="py-4 px-4">
+                                    <span class="px-2 py-1 text-xs rounded-full {% if subject.course_type == 'Core' %}bg-blue-100 text-blue-800{% elif subject.course_type == 'Elective' %}bg-green-100 text-green-800{% else %}bg-purple-100 text-purple-800{% endif %}">
+                                        {{ subject.course_type }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <i class="fas fa-book text-gray-400 text-4xl mb-4"></i>
+                    <p class="text-gray-500">No subjects created yet</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- All Exams -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-list text-orange-600 mr-2"></i>All Exams
+                </h2>
+                {% if exams %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for exam in exams %}
+                            <tr class="hover:bg-gray-50 transition duration-200">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-graduation-cap text-orange-600"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-900">{{ exam.subject }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ exam.date }}</td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ exam.time }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <i class="fas fa-graduation-cap text-gray-400 text-4xl mb-4"></i>
+                    <p class="text-gray-500">No exams scheduled</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- All Semester Results -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-slide-up">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-graduation-cap text-rose-600 mr-2"></i>All Semester Results
+                </h2>
+                {% if semester_results %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Semester</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marks</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for result in semester_results %}
+                            <tr class="hover:bg-gray-50 transition duration-200">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-user text-rose-600"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-900">{{ result.student.name }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ result.semester.name }}</td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ result.subject.name }}</td>
+                                <td class="py-4 px-4 text-sm font-semibold text-gray-900">{{ result.marks_obtained }}/100</td>
+                                <td class="py-4 px-4">
+                                    <span class="px-2 py-1 text-xs rounded-full {% if result.grade == 'A' %}bg-green-100 text-green-800{% elif result.grade == 'B' %}bg-blue-100 text-blue-800{% elif result.grade == 'C' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                        {{ result.grade }}
+                                    </span>
+                                </td>
+                                <td class="py-4 px-4 text-sm font-semibold text-gray-900">{{ result.grade_points }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <i class="fas fa-graduation-cap text-gray-400 text-4xl mb-4"></i>
+                    <p class="text-gray-500">No semester results recorded yet</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- All Exam Marks -->
+            <div class="bg-white rounded-xl shadow-lg p-6 animate-bounce-in">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">
+                    <i class="fas fa-chart-bar text-purple-600 mr-2"></i>All Exam Marks
+                </h2>
+                {% if marks %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exam</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marks</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for mark in marks %}
+                            <tr class="hover:bg-gray-50 transition duration-200">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-user text-purple-600"></i>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-900">{{ mark.student.name }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ mark.exam.subject }}</td>
+                                <td class="py-4 px-4 text-sm font-semibold text-gray-900">{{ mark.marks }}/100</td>
+                                <td class="py-4 px-4">
+                                    <span class="px-2 py-1 text-xs rounded-full {% if mark.grade == 'A' %}bg-green-100 text-green-800{% elif mark.grade == 'B' %}bg-blue-100 text-blue-800{% elif mark.grade == 'C' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                        {{ mark.grade }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-8">
+                    <i class="fas fa-chart-bar text-gray-400 text-4xl mb-4"></i>
+                    <p class="text-gray-500">No exam marks recorded yet</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="mt-8">
+        {% for message in messages %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg animate-fade-in">
+            <i class="fas fa-check-circle mr-2"></i>{{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

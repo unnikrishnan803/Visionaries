@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ERP Lite{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'bounce-in': 'bounceIn 0.6s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.3)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)' },
+                            '70%': { transform: 'scale(0.9)' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+        .animate-slide-up { animation: slideUp 0.5s ease-out; }
+        .animate-bounce-in { animation: bounceIn 0.6s ease-out; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Gradient text animation */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-gradient {
+            background: linear-gradient(-45deg, #ffffff, #3b82f6, #8b5cf6, #ec4899);
+            background-size: 400% 400%;
+            animation: gradient 3s ease infinite;
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hover effects */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Pulse animation for buttons */
+        .pulse-button {
+            animation: pulse 2s infinite;
+        }
+
+        /* Floating shapes for decoration */
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 font-sans">
+    <nav class="bg-gray-900 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-2">
+                                <span class="text-white font-bold text-sm">E</span>
+                            </div>
+                            <h1 class="text-xl font-semibold">ERP Lite</h1>
+                        </div>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4">
+                            <a href="{% url 'main:home' %}" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Home</a>
+                            <a href="{% url 'admissions:admissions' %}" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Admissions</a>
+                            <a href="{% url 'fees:fees' %}" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Fees</a>
+                            <a href="{% url 'hostel:hostel' %}" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Hostel</a>
+                            <a href="{% url 'exams:exams' %}" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Exams</a>
+                            <a href="{% url 'dashboard:dashboard' %}" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Dashboard</a>
+                            <a href="{% url 'main:profile' %}" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Profile</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-4">
+                        {% if user.is_authenticated %}
+                            <span class="text-gray-300 px-3 py-2 rounded-md text-sm font-medium">Hello, {{ user.get_full_name|default:user.username }}</span>
+                            <form method="post" action="{% url 'main:logout' %}" class="inline">
+                                {% csrf_token %}
+                                <button type="submit" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium bg-transparent border-none text-white transition duration-150">Logout</button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'main:login' %}" class="hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium transition duration-150">Login</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div class="md:hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="{% url 'main:home' %}" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="{% url 'admissions:admissions' %}" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">Admissions</a>
+                <a href="{% url 'fees:fees' %}" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">Fees</a>
+                <a href="{% url 'hostel:hostel' %}" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">Hostel</a>
+                <a href="{% url 'exams:exams' %}" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">Exams</a>
+                <a href="{% url 'dashboard:dashboard' %}" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <a href="{% url 'main:profile' %}" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">Profile</a>
+                {% if user.is_authenticated %}
+                    <span class="block px-3 py-2 rounded-md text-base font-medium text-gray-300">Hello, {{ user.get_full_name|default:user.username }}</span>
+                    <form method="post" action="{% url 'main:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium bg-transparent border-none text-white text-left w-full">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'main:login' %}" class="hover:bg-gray-700 block px-3 py-2 rounded-md text-base font-medium">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-gray-900 text-white text-center py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-gray-400">&copy; 2025 ERP Lite. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

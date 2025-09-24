@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Analytics - {{ student.name }} - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <div class="mb-6">
+        <a href="{% url 'admissions:manage_analytics' %}" class="text-blue-600 hover:text-blue-800">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Analytics List
+        </a>
+    </div>
+
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">
+        <i class="fas fa-chart-line text-purple-600 mr-2"></i>Update Analytics for {{ student.name }}
+    </h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Student Info -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Student Information</h2>
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Student ID:</span>
+                    <span class="font-semibold">{{ student.student_id }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Name:</span>
+                    <span class="font-semibold">{{ student.name }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Institution:</span>
+                    <span class="font-semibold">{{ student.institution_name|default:"N/A" }} ({{ student.institution_type }})</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Class/Degree:</span>
+                    <span class="font-semibold">
+                        {% if student.institution_type == 'School' %}
+                            Grade {{ student.grade }}
+                        {% else %}
+                            {{ student.level }} - {{ student.degree }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Current Risk Level:</span>
+                    <span class="px-2 py-1 text-xs rounded-full font-medium
+                        {% if student.dropout_risk_score >= 0.7 %}bg-red-100 text-red-800
+                        {% elif student.dropout_risk_score >= 0.5 %}bg-yellow-100 text-yellow-800
+                        {% elif student.dropout_risk_score >= 0.3 %}bg-orange-100 text-orange-800
+                        {% else %}bg-green-100 text-green-800{% endif %}">
+                        {{ student.get_dropout_risk_level }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Analytics -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Current Analytics</h2>
+            {% if analytics %}
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">CGPA:</span>
+                    <span class="font-semibold">{{ analytics.cgpa|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Current GPA:</span>
+                    <span class="font-semibold">{{ analytics.current_gpa|floatformat:2 }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Total Credits:</span>
+                    <span class="font-semibold">{{ analytics.total_credits }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Average Attendance:</span>
+                    <span class="font-semibold">{{ analytics.average_attendance|floatformat:1 }}%</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Study Hours/Week:</span>
+                    <span class="font-semibold">{{ analytics.study_hours_per_week }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Predicted Final GPA:</span>
+                    <span class="font-semibold">{{ analytics.predicted_final_gpa|floatformat:2 }}</span>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-gray-600">No analytics data available yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Update Form -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Update Performance Data</h2>
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Current GPA</label>
+                    {{ form.current_gpa }}
+                    {% if form.current_gpa.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.current_gpa.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Average Attendance (%)</label>
+                    {{ form.average_attendance }}
+                    {% if form.average_attendance.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.average_attendance.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Study Hours per Week</label>
+                    {{ form.study_hours_per_week }}
+                    {% if form.study_hours_per_week.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.study_hours_per_week.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Extracurricular Activities</label>
+                    {{ form.extracurricular_activities }}
+                    {% if form.extracurricular_activities.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.extracurricular_activities.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+                <a href="{% url 'admissions:manage_analytics' %}" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                </a>
+                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300">
+                    <i class="fas fa-save mr-2"></i>Update Analytics
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="mt-6">
+        {% for message in messages %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg animate-fade-in">
+            <i class="fas fa-check-circle mr-2"></i>{{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

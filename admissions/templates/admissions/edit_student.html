@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Student - ERP Lite{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-900">Edit Student Details</h2>
+        <p class="mt-2 text-gray-600">Update information for {{ student.name }}</p>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="{{ form.course.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Course</label>
+                {{ form.course }}
+                {% if form.course.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.course.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.age.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                {{ form.age }}
+                {% if form.age.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.age.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <label for="{{ form.date_of_birth.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+            {{ form.date_of_birth }}
+            {% if form.date_of_birth.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.date_of_birth.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="{{ form.guardian_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Guardian Name</label>
+                {{ form.guardian_name }}
+                {% if form.guardian_name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.guardian_name.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="{{ form.phone.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                {{ form.phone }}
+                {% if form.phone.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.phone.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <label for="{{ form.photo.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Photo</label>
+            {{ form.photo }}
+            {% if form.photo.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.photo.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="{% url 'dashboard:dashboard' %}" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300">
+                Cancel
+            </a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Update Student
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    input[type="text"], input[type="email"], input[type="number"], input[type="date"], input[type="tel"], input[type="file"], select, textarea {
+        @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+    }
+</style>
+{% endblock %}
